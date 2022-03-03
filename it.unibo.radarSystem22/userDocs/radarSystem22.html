@@ -1,5 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
+<head>
+  <meta charset="UTF-8">
+</head> 
     <!--
 <link rel="stylesheet" type="text/css" href="../css/issStyle1.css">
 <script type="text/javascript" src="../css/issStyle.js"></script>
@@ -201,30 +204,60 @@ div.imagedesc{
 Primo progetto. 
  
 <h2>Requirements</h2>
-
- 
 <div class="remark">
- 
-Si desidera costruire un'applicazione software capace di:
+	<p>Si desidera costruire un'applicazione software capace di:</p>
 
-<ul>
-<li>(requisito <b>radarGui</b>) mostrare le distanze rilevate da un sensore Sonar <tt>HC-SR04</tt>
- connesso a un RaspberryPi su un display (RadarDisplay) a forma di radar connesso a un PC.
-
-<center><img src="img/radarDisplay.png" width="10%"></img></center>
-<li>(requisito <b>ledAlarm</b>) accendere un Led se la distanza rilevata dal Sonar è inferiore a un valore limite prefissato denominato <tt>DLIMIT</tt>.
-</li> 
+	<ul>
+	<li>(requisito <b>radarGui</b>) mostrare le distanze rilevate da un sensore Sonar <tt>HC-SR04</tt> connesso a un RaspberryPi su un display (RadarDisplay) a forma di radar connesso a un PC.
+	<center><img src="img/radarDisplay.png" width="10%"></img></center>.</li> 
+	<li>(requisito <b>ledAlarm</b>) accendere un Led se la distanza rilevata dal Sonar è inferiore a un valore limite prefissato denominato <tt>DLIMIT</tt>.</li>
+	</ul>
 </div>
 
  
 
 <h2>Requirement analysis</h2>
- 
-
+<div class="remark">
+	<p>Dizionario:</p>
+	<table>
+	  <tr>
+	    <th>Termine</th>
+	    <th>Sinonimi</th>
+	    <th>Significato</th>
+	  </tr>
+	  <tr>
+	    <td><i>Sensore</i></td>
+	    <td>radar</td>
+	    <td>Sensore Sonar HC-SR04, che fornisce la misura della distanza</td>
+	  </tr>
+	  <tr>
+	  	<td><i>Led</i></td>
+	  	<td></td>
+	    <td>Dispositivo luminoso di output, che si accende in caso la distanza sia &ltDILIMT</td>
+	  </tr>
+	  <tr>
+	    <td><i>RadarDisplay</i></td>
+	    <td></td>
+	    <td>Schermata mostrata dall'applicazione su PC che raffigura un radar, contenente un puntino tanto più distante dal centro quanto più lontano si trova l'ostacolo</td>
+	  </tr>
+	</table> 
+	<p><b>User-story US1:</b> L'utente pone un ostacolo a distanza d&ltDILIMT dal sensore, aspettandosi che il led si accenda. L'utente poi allontana l'ostacolo da sensore, visualizzando la variazione di posizione sul radar. Continuando ad allontanare l'ostacolo, una volta raggiunta la distanza d&gtDILIMT, il led si deve spegnere. </p> 
 </div>
 
 <h2>Problem analysis</h2>
- 
+<div class="remark">
+	<p>Il sistema si divide in due macro componenti: una applicazione deve essere messa in esecuzione sulla Raspberry, mentre un'ulteriore applicazione deve essere eseguita sul pc. </p>
+	<ul>
+		<li>quella in esecuzione sulla raspberry deve interfacciarsi con i pin di GPIO in modo da interpretare i segnali del sonar, tradurli in una distanza, e in base ad essa modificare accendere o spegnere il LED</li>
+		<li>quella in esecuzione sul PC deve mostrare a video il dato relativo alla distanza corrente</li>
+	</ul>
+	<p>La natura del sistema implica uno scambio di informazioni unidirezionale dall'applicazione sulla raspberry (produttore), al terminale con il radar (consumatore). <p>
+	<ul>
+		<li>Si potrebbe quindi fare utilizzo di una iterazione client-server, che tuttavia non permetterebbe un aggiornamento in tempo reale della nuova posizione dell'ostacolo (ma potrebbe risultare efficacie nel caso in cui la frequenza di aggiornamento richiesta non debba essere particolarmente elevata, utilizzando una strategia a polling). </li>
+		<li>Un modello più adatto risulterebbe quello publish-subscribe, dove i consumatori ricevono un messaggio ad ogni nuovo spostamento del punto. Il sistema nel suo complesso risulterebbe tuttavia più complesso necessitando della disponibilità di un broker. </li>
+		<li>Ulteriore alternativa sarebbe quella di inviare al consumatore i dati ad ogni nuovo movimento, ma ciò richiederebbe la conoscenza dell'indirizzo del terminale sul quale risiede l'applicazione che mostra il radar (o in alternatica lo sviluppo di un piccolo protocollo)</li>
+	</ul>
+</div>
 
 <h2>Test plans</h2> 
 
@@ -254,8 +287,11 @@ Si desidera costruire un'applicazione software capace di:
 <br/><br/> 	
 </div>  
 
-<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white;padding-left: 0.5%;"><p>By Loris Giannatempo <br>
-Email: loris.giannatempo@studio.unibo.it</p><img alt="mbot" src="img/20220223_182938.jpg" width="30%" height="30%">
+<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white;padding-left: 0.5%;">
+<p>By Loris Giannatempo <br>
+Email: loris.giannatempo@studio.unibo.it <br>
+Git: https://github.com/LorisGiann/ISS-projects</p>
+<img alt="mbot" src="img/20220223_182938.jpg" width="30%" height="30%">
 
 
 </div> 
