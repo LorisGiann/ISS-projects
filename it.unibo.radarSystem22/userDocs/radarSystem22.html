@@ -217,7 +217,7 @@ Primo progetto.
  
 
 <h2>Requirement analysis</h2>
-<div class="remark">
+<!--<div class="remark">
 	<p>Dizionario:</p>
 	<table>
 	  <tr>
@@ -242,10 +242,10 @@ Primo progetto.
 	  </tr>
 	</table> 
 	<p><b>User-story US1:</b> L'utente pone un ostacolo a distanza d&ltDILIMT dal sensore, aspettandosi che il led si accenda. L'utente poi allontana l'ostacolo da sensore, visualizzando la variazione di posizione sul radar. Continuando ad allontanare l'ostacolo, una volta raggiunta la distanza d&gtDILIMT, il led si deve spegnere. </p> 
-</div>
+</div>-->
 
 <h2>Problem analysis</h2>
-<div class="remark">
+<!--<div class="remark">
 	<p>Il sistema si divide in due macro componenti: una applicazione deve essere messa in esecuzione sulla Raspberry, mentre un'ulteriore applicazione deve essere eseguita sul pc. </p>
 	<ul>
 		<li>quella in esecuzione sulla raspberry deve interfacciarsi con i pin di GPIO in modo da interpretare i segnali del sonar, tradurli in una distanza, e in base ad essa modificare accendere o spegnere il LED</li>
@@ -257,10 +257,17 @@ Primo progetto.
 		<li>Un modello più adatto risulterebbe quello publish-subscribe, dove i consumatori ricevono un messaggio ad ogni nuovo spostamento del punto. Il sistema nel suo complesso risulterebbe tuttavia più complesso necessitando della disponibilità di un broker. </li>
 		<li>Ulteriore alternativa sarebbe quella di inviare al consumatore i dati ad ogni nuovo movimento, ma ciò richiederebbe la conoscenza dell'indirizzo del terminale sul quale risiede l'applicazione che mostra il radar (o in alternatica lo sviluppo di un piccolo protocollo)</li>
 	</ul>
-</div>
+</div>-->
 
 <h2>Test plans</h2> 
-
+<div class="remark">
+	<ol>
+		<li>Test snippet di codice forniti e eventuali modifiche per rendere compatibili i programmi per architettura a 64 bit</li>
+		<li>A partire dallo <a href="../rpi/code/modified/c">snippet</a> di condice C che misura e fa lampeggiare il led sono state aggiunte delle funzioni per la realizzazione di un server UDP in ascolto sulla porta 8080 (<a href="../rpi/LedBlinkSonarUdp.c">programma realizzato</a>). <br> Ad ogni pacchetto di richiesta ne viene inviato uno di risposta con la distanza (il server lavora su un thread separato) </li>
+		<li>É stata creata la classe <a href="../src/it/unibo/radarSystem22/main/ConnClient.java">ConnClient.java</a> che si occupa di effettuare una richiesta al server</li>
+		<li>É stata modificata la classe <a href="../src/it/unibo/radarSystem22/main/RadarUsageMain.java">RadarUsageMain.java</a></li>
+	</ol>
+</div>
 
 <h2>Project</h2> 
  
