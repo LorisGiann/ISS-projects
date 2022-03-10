@@ -1,4 +1,6 @@
-package it.unibo.radarSystem22.domain;
+package it.unibo.radarSystem22.domain.interfaces;
+
+import it.unibo.radarSystem22.domain.interfaces.IDistance;
 
 public interface ISonar {
 	public void activate();
