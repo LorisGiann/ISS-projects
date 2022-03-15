@@ -9,7 +9,7 @@ import it.unibo.radarSystem22.domain.utils.DomainSystemConfig;
 
 
 
-public abstract class SonarModel  implements ISonar{  
+public abstract class SonarModel implements ISonar{  
 
 protected  IDistance curVal = new Distance(90);
 //NOTE: Accesses and updates to the memory cells corresponding to fields of any 
