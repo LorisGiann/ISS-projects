@@ -16,7 +16,7 @@ version '1.0'
 sourceCompatibility = 1.8
 
 repositories {
-    jcenter()
+    mavenCentral()
     flatDir { dirs '../unibolibs' }
 }
 
@@ -28,7 +28,7 @@ dependencies {
     implementation name: 'uniboInterfaces'
     implementation name: 'unibonoawtsupports'
     //RADAR (support and GUI)
-    //implementation name: 'radarPojo'
+    implementation name: 'radarPojo'
     implementation group: 'org.pushingpixels', name: 'trident', version: '1.3'
 }
 
