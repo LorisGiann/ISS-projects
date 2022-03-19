@@ -18,7 +18,6 @@
 "mqttBrokerAddr"   : "tcp://localhost:1883",
 "tempBrokerAddr"   : "tcp://broker.hivemq.com",
 
-
 "simulation"       : "true",
 "sonarDistanceMax" : "150",
 "sonarDelay"       : "200",

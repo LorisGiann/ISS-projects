@@ -2,5 +2,9 @@
 "DLIMIT"           : "70",
 "RadarGuiRemote"   : "true",
 "tracing"          : "false",
-"testing"          : "false"
+"testing"          : "false",
+
+"_comment"         : "SPINT 2",
+"serverPort"       : "8080",
+"hostAddr"         : "192.168.1.124"
 }
