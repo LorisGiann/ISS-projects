@@ -1,4 +1,4 @@
-package it.unibo.comm2022.tcp;
+package it.unibo.comm2022.common;
 
 import it.unibo.comm2022.ApplMsgHandler;
 import it.unibo.comm2022.interfaces.Interaction2021;
