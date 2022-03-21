@@ -276,6 +276,8 @@ Primo progetto.
 	</ol>
 	<h5> Architettura sistema </h5>
 	<center><img src="img/architecture_old_udpProj.png" width="40%"></img></center>
+	<p>La differenza rispetto al progetto visto in aula è notevole. A livello architetturale, il programma C non ha una vera e propria struttura, si tratta essenzialmente di un insieme di funzioni, alcune delle quali sono "attive" nel senso che vengono lanciate in un thread a parte (come quella che fa lampeggiare il led e quella per il server). La comunicazione tra thread avviene tramite l'utilizzo di variabili globali.</p>
+	<p>Vi è anche una differenza a livello di interazione: Nel caso del programma C essendo il raspberry il server, il client dovrà fare una richiesta in maniera ciclica (a meno di non usare un sistema in cui il client si registra presso il server in modo che esso invii verso i client in maniera push i dati). Viceversa nel programma java è il raspberry il client, e questo invia i dati al monitor quando necessario</p>
 </div>
  
 </div>
