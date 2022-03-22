@@ -15,6 +15,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 
 import it.unibo.comm2022.interfaces.Interaction2021;
+import it.unibo.comm2022.utils.BasicUtils;
 import it.unibo.comm2022.utils.ColorsOut;
   
 
@@ -24,6 +25,7 @@ public static final int MAX_PACKET_LEN = 1025;
 protected DatagramSocket socket;
 protected UdpEndpoint endpoint;
 protected boolean closed;
+protected static final String closeMsg = "_CLOSE_";
 
 private DatagramPacket packet = null;
 
@@ -35,8 +37,8 @@ private DatagramPacket packet = null;
 	
 	@Override
 	public void forward(String msg)  throws Exception {
-		//ColorsOut.out( "UdpConnection | sendALine  " + msg + " to " + client, ColorsOut.ANSI_YELLOW );	 
-		if (closed) { throw new Exception("The connection has been previously closed"); }
+		if(closed) {throw new IllegalStateException("This connection has previously been closed!");}
+		//ColorsOut.out( "UdpConnection | sendALine  " + msg + " to " + client, ColorsOut.ANSI_YELLOW );	
 		try {
 			byte[] buf = msg.getBytes();
 			DatagramPacket packet = new DatagramPacket(buf, buf.length, endpoint.getAddress(), endpoint.getPort());
@@ -61,10 +63,10 @@ private DatagramPacket packet = null;
 	} 
 	
 	@Override
-	public String receiveMsg()  {
+	public String receiveMsg() throws Exception  {
+		if(closed) {throw new IllegalStateException("This connection has previously been closed!");}
 		String line;
  		try {
-			//socket.setSoTimeout(timeOut)
 			if(closed) {
 				line = null; //UdpApplMessageHandler will terminate
 			}else {
@@ -72,19 +74,33 @@ private DatagramPacket packet = null;
 				DatagramPacket packet = new DatagramPacket(buf, buf.length);
 				socket.receive(packet);
 				line = new String(packet.getData(), 0, packet.getLength());
-				packet = null;
+				if(closeMsg.equals(line)) {
+					line = null;
+					closed = true;
+					ColorsOut.out("UdpConnection | server " + endpoint + " is closing connection");
+				}
 			}
  			return line;		
 		} catch ( Exception e ) {
-			ColorsOut.outerr( "UdpConnection | receiveMsg ERROR  " + e.getMessage() );	
-	 		return null;
+			//ColorsOut.outerr( "UdpConnection | receiveMsg ERROR  " + e.getMessage() );	
+	 		//return null;
+			throw e;
 		}		
 	}
 
 	@Override
-	public void close() {
+	public void close() throws IOException {
+		if(closed) return;
 		closed = true;
-		socket.close();
+		ColorsOut.out("UdpConnection | closing connection with server" + endpoint);
+		sendClosePacket();
+		socket.close(); //socket on client have to be closed
+	}
+	
+	protected void sendClosePacket() throws IOException { //packet signaling the endpoint that the connection is now closed
+		byte[] buf = closeMsg.getBytes();
+		DatagramPacket packet = new DatagramPacket(buf, buf.length, endpoint.getAddress(), endpoint.getPort());
+        socket.send(packet);
 	}
 
 

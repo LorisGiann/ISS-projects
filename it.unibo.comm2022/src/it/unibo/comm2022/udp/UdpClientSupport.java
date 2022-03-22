@@ -12,7 +12,7 @@ public class UdpClientSupport {
 	
 	public static Interaction2021 connect(String host, int port) throws Exception {
 		DatagramSocket socket = new DatagramSocket();
-		//socket.setSoTimeout(timeOut)
+		//socket.setSoTimeout(10);
         InetAddress address = InetAddress.getByName(host);
         UdpEndpoint server = new UdpEndpoint(address, port);
 		Interaction2021 conn  =  new UdpConnection(socket, server);

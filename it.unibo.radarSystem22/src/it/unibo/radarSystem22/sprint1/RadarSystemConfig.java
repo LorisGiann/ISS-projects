@@ -37,13 +37,18 @@ public class RadarSystemConfig {
 			}
 	        JSONTokener tokener = new JSONTokener(fis);
 	        JSONObject object   = new JSONObject(tokener);
-	 		
-   	        tracing          = object.getBoolean("tracing");
+	        
+	        tracing          = object.getBoolean("tracing");
 	        testing          = object.getBoolean("testing");
 	        RadarGuiRemote   = object.getBoolean("RadarGuiRemote");
 	        DLIMIT           = object.getInt("DLIMIT");	
-	        hostAddr         = object.getString("hostAddr");
-	        serverPort       = object.getInt("serverPort");
+//Aggiunte dello SPRINT2	
+	        serverPort		= object.getInt("serverPort");
+ 	        hostAddr 		= object.getString("hostAddr");
+	        raspAddr 		= object.getString("raspAddr");
+//Aggiunte dello SPRINT2a
+	        ledPort         = object.getInt("ledPort");
+	        sonarPort       = object.getInt("sonarPort");
  	        
 		} catch (FileNotFoundException e) {
  			ColorsOut.outerr("setTheConfiguration ERROR " + e.getMessage() );

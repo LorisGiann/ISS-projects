@@ -6,5 +6,10 @@
 
 "_comment"         : "SPINT 2",
 "serverPort"       : "8080",
-"hostAddr"         : "192.168.1.124"
+"hostAddr"         : "192.168.1.124",
+
+"_comment_"         : "SPINT 2a",
+"ledPort"          : "8010",
+"sonarPort"        : "8015",
+"raspAddr"         : "192.168.1.115"
 }

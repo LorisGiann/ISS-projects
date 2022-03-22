@@ -13,19 +13,14 @@ import it.unibo.comm2022.interfaces.Interaction2021;
 public class ClientDoingRequest {
 	public static boolean withserver = true;
 	
-	public void doWork( String name ) {
-		try {
-			Interaction2021 conn  = UdpClientSupport.connect("localhost", TestUdpSupportsForRequest.testPort);
-			String request = "hello_from_" + name;
-			System.out.println(name + " | forward the request=" + request + " on conn:" + conn);	 
-			conn.forward(request);
-			String answer = conn.receiveMsg();
-			System.out.println(name + " | receives the answer: " +answer );	
-			assertTrue( answer.equals("answerTo_"+ request));
-		} catch (Exception e) {
-			System.out.println(name + " | ERROR " + e.getMessage());	
-			if( withserver ) fail();
-		}
+	public void doWork( String name ) throws Exception {
+		Interaction2021 conn  = UdpClientSupport.connect("localhost", TestUdpSupportsForRequest.testPort);
+		String request = "hello_from_" + name;
+		System.out.println(name + " | forward the request=" + request + " on conn:" + conn);	 
+		conn.forward(request);
+		String answer = conn.receiveMsg();
+		System.out.println(name + " | receives the answer: " +answer );	
+		assertTrue( answer.equals("answerTo_"+ request));
 	}
 
 }

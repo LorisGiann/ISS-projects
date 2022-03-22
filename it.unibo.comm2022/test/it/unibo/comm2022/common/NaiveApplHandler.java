@@ -5,6 +5,9 @@ import it.unibo.comm2022.interfaces.Interaction2021;
 
 public class NaiveApplHandler extends ApplMsgHandler {
 
+	public Interaction2021 serverConn; //needed for test
+
+
 	public NaiveApplHandler(String name) {
 		super(name);
 	}

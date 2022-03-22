@@ -28,14 +28,14 @@ protected boolean stopped = true;
  	public UdpServer( String name, int port,  IApplMsgHandler userDefHandler   ) {
 		super(name);
 		connectionsMap = new ConcurrentHashMap<UdpEndpoint,UdpServerConnection>();
-	      try {
+	     try {
 	  		this.userDefHandler   = userDefHandler;
 	  		ColorsOut.out(getName() + " | costructor port=" + port, ColorsOut.BLUE  );  
 			this.name             = getName();
-			socket                  = new DatagramSocket( port );
-			//socket.setSoTimeout(CommSystemConfig.serverTimeOut);
+			socket                = new DatagramSocket( port );
+			socket.setSoTimeout(CommSystemConfig.serverTimeOut);
 	     }catch (Exception e) { 
-	    	 ColorsOut.outerr(getName() + " | costruct ERROR: " + e.getMessage());
+	     	 ColorsOut.outerr(getName() + " | costruct ERROR: " + e.getMessage());
 	     }
 	}
 	
@@ -48,18 +48,17 @@ protected boolean stopped = true;
 				//ColorsOut.out(getName() + " | waits on server port=" + port + " serversock=" + serversock );	 
 				buf = new byte[UdpConnection.MAX_PACKET_LEN];
 				DatagramPacket packet = new DatagramPacket(buf, buf.length);
-				socket.receive(packet);
+				socket.receive(packet); //this is the only serverside receive on this socket
 				InetAddress address = packet.getAddress();
 	            int port = packet.getPort();
 	            UdpEndpoint client = new UdpEndpoint(address, port);
-	            //String received = new String(packet.getData(), 0, packet.getLength());
 	            ColorsOut.out(getName() + " | received packet from " + client, ColorsOut.BLUE   ); 
 	            UdpServerConnection conn = connectionsMap.get(client);
 	            if(conn == null) {
 	            	conn = new UdpServerConnection(socket, client, connectionsMap);
 	            	connectionsMap.put(client, conn);
 	            }
-	            conn.handle(packet);
+	            conn.handle(packet); //packets are passed to the corresponding connection
 		 		//Create a message handler on the connection
 		 		new UdpApplMessageHandler( userDefHandler, conn );			 		
 			}//while
@@ -79,6 +78,9 @@ protected boolean stopped = true;
 		try {
 			ColorsOut.out(getName()+" |  DEACTIVATE serversock=" +  socket);
 			stopped = true;
+			for(UdpServerConnection conn : connectionsMap.values()) {
+				conn.close();
+			}
 			socket.close();
 			connectionsMap.clear();
 		} catch (Exception e) {

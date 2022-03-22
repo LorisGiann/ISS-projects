@@ -33,50 +33,60 @@ private Semaphore waitToConsumeNewPacket = new Semaphore(0); //receiveMsg() wait
 	
 	@Override
 	public void forward(String msg)  throws Exception {
-		//ColorsOut.out( "UdpConnection | sendALine  " + msg + " to " + client, ColorsOut.ANSI_YELLOW );	 
+		//ColorsOut.out( "UdpServerConnection | sendALine  " + msg + " to " + client, ColorsOut.ANSI_YELLOW );
+		if(super.closed) {throw new IllegalStateException("This connection has previously been closed!");}
 		try {
 			byte[] buf = msg.getBytes();
 			DatagramPacket packet = new DatagramPacket(buf, buf.length, super.endpoint.getAddress(), super.endpoint.getPort());
 	        socket.send(packet);
-			//Colors.out( "UdpConnection | has sent   " + msg, Colors.ANSI_YELLOW );	 
+			//Colors.out( "UdpServerConnection | has sent   " + msg, Colors.ANSI_YELLOW );	 
 		} catch (IOException e) {
-			//Colors.outerr( "UdpConnection | sendALine ERROR " + e.getMessage());	 
+			//Colors.outerr( "UdpServerConnection | sendALine ERROR " + e.getMessage());	 
 			throw e;
 		}	
 	}
 	
 	@Override
-	public String receiveMsg()  {
+	public String receiveMsg() throws Exception  {
 		String line;
  		try {
- 			waitToConsumeNewPacket.acquire(); //blocking =>
-			if(closed && packet==null) {
-				line = null; //UdpApplMessageHandler will terminate
-			}else {
-				line = new String(packet.getData(), 0, packet.getLength());
-				packet = null;
-			}
+ 			if(!super.closed) waitToConsumeNewPacket.acquire(); //blocking if connection not closed
+ 			if(super.closed) return null; //UdpApplMessageHandler will terminate
+			line = new String(packet.getData(), 0, packet.getLength());
+			packet = null;
 			waitToEnterNewPacket.release();
  			return line;		
 		} catch ( Exception e ) {
-			ColorsOut.outerr( "UdpConnection | receiveMsg ERROR  " + e.getMessage() );	
-	 		return null;
+			//ColorsOut.outerr( "UdpServerConnection | receiveMsg ERROR  " + e.getMessage() );	
+	 		//return null;
+			throw e;
 		}		
 	}
 
 	@Override
-	public void close() {
-		connMap.remove(super.endpoint); //new packects that still have to arrive will now use a new connection object and a new message handler
+	public void close() throws IOException {
+		if(super.closed) return;
+		ColorsOut.out("UdpServerConnection | server is closing connection with client " + super.endpoint);
+		localClose();
+		sendClosePacket();
+		//no socket to close on server, other present or future connections may need it
+    }
+	
+	private void localClose() {
+		connMap.remove(super.endpoint); //new packects will now use a new connection object and a new message handler. No other packet will reach this class!
 		super.closed = true;
-		//if a packet is still in "packet" variable, it will still be processed at the next read
-		//also, if the server thread is waiting for entering a packet on this object, it will be able to do so, after the "packet" variable is consumed. The "packet" will be refilled by the server thread, but that will be the last time! This packet will also be consumed
 	}
 	
 	//handle packets that are received from server
 	public void handle(DatagramPacket packet) {
+		if(super.closed) {throw new IllegalStateException("This connection has previously been closed!");}
 		try {
 			waitToEnterNewPacket.acquire();
 			this.packet = packet;
+			if(packet.getLength()==closeMsg.length() && closeMsg.equals(new String(packet.getData(), 0, packet.getLength()))) {
+				ColorsOut.out("UdpServerConnection | client " + super.endpoint + " is closing connection");
+				localClose();
+			}
 			waitToConsumeNewPacket.release(); // enable receiveMsg()
 		} catch (InterruptedException e) {}
 	}
