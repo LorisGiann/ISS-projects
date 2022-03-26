@@ -274,10 +274,22 @@ Primo progetto.
 		<li>É stata creata la classe <a href="../src/it/unibo/radarSystem22/oldUdp/ConnClient.java">ConnClient.java</a> che si occupa di effettuare una richiesta al server</li>
 		<li>É stata modificata la classe <a href="../src/it/unibo/radarSystem22/oldUdp/RadarUsageMain.java">RadarUsageMain.java</a></li>
 	</ol>
-	<h5> Architettura sistema </h5>
+	<h5> Architettura sistema fatto a casa</h5>
 	<center><img src="img/architecture_old_udpProj.png" width="40%"></img></center>
 	<p>La differenza rispetto al progetto visto in aula è notevole. A livello architetturale, il programma C non ha una vera e propria struttura, si tratta essenzialmente di un insieme di funzioni, alcune delle quali sono "attive" nel senso che vengono lanciate in un thread a parte (come quella che fa lampeggiare il led e quella per il server). La comunicazione tra thread avviene tramite l'utilizzo di variabili globali.</p>
 	<p>Vi è anche una differenza a livello di interazione: Nel caso del programma C essendo il raspberry il server, il client dovrà fare una richiesta in maniera ciclica (a meno di non usare un sistema in cui il client si registra presso il server in modo che esso invii verso i client in maniera push i dati). Viceversa nel programma java è il raspberry il client, e questo invia i dati al monitor quando necessario</p>
+	<h5> it.unibo.comm2022.udp.giannatempo </h5>
+	<center><img src="img/it.unibo.comm2022.udp.giannatempo.png" width="50%"></img></center>
+	<p>Ogni client può ottenere una connessione (<i>UdpConnection</i>, che implementa <i>Interaction2021</i>) attraverso <i>UdpClientSupport</i>.</p>
+	<p><i>UdpServer</i> apre una socket in ascolto di un qualunque pacchetto UDP sulla porta predefinita.</p>
+	<p>Quando un client invia un messaggio, il pacchetto viene ricevuto da <i>UdpServer</i>. <i>UdpServer</i> si sincronizza con l'<i>UdpApplMessageHandler</i> corrispondente per passargli il pacchetto. <br> 
+	Se si tratta invece di una nuova connessione, viene creato un nuovo <i>UdpServerConnection</i> che viene gestito da un nuovo oggetto attivo <i>UdpApplMessageHandler</i>. </p>
+	<p> La connessione viene chiusa quando un endpoint effettua una close sulla connessione. La chiusura effettiva della connessione da parte dell'endpoint remoto avverra quando quest'ultimo effettuerà una read di un messaggio. <br>
+	Nel caso di close da parte del server, il client crederà che la connessione sia rimasta aperta finchè non verrà effettuata una <i>receiveMsg()</i>: se durante questo lasso di tempo vengono inviati messaggi, il server li tratterà come se fossero pacchetti di una nuova connessione con l'endpoint!. <br> 
+	Invece, nel caso di close da parte del client, il server chiuderà automaticamente e immediatamente la connessione, siccome <i>UdpApplMessageHandler</i> chiama di continuo <i>UdpServerConnection.receiveMsg()</i> </p>
+	
+	<p>NOTA: la soluzione adottata è architetturalmente uguale a quella per Tcp (lo schema visto prima riporta tuttavia qualche dettaglio in più)</p>
+	<center><img src="img/ServerAndConnections.png" width="40%"></img></center>
 </div>
  
 </div>

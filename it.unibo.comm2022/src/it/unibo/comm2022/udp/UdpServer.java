@@ -57,10 +57,10 @@ protected boolean stopped = true;
 	            if(conn == null) {
 	            	conn = new UdpServerConnection(socket, client, connectionsMap);
 	            	connectionsMap.put(client, conn);
+	            	//Create a message handler on the connection
+			 		new UdpApplMessageHandler( userDefHandler, conn );	
 	            }
-	            conn.handle(packet); //packets are passed to the corresponding connection
-		 		//Create a message handler on the connection
-		 		new UdpApplMessageHandler( userDefHandler, conn );			 		
+	            conn.handle(packet); //packets are passed to the corresponding connection		 		
 			}//while
 		  }catch (Exception e) {  //Scatta quando la deactive esegue: serversock.close();
 			  ColorsOut.out(getName() + " | probably socket closed: " + e.getMessage(), ColorsOut.GREEN);		 

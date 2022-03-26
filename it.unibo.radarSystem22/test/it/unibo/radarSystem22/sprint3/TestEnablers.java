@@ -37,7 +37,7 @@ public class TestEnablers {
  	  RadarSystemConfig.tracing    = false;
 //	  RadarSystemConfig.testing    = false;
 
-	  ProtocolType protocol = ProtocolType.tcp;
+	  ProtocolType protocol = ProtocolType.udp;
 	  //I devices
 	  sonar   = DeviceFactory.createSonar();
 	  led     = DeviceFactory.createLed();

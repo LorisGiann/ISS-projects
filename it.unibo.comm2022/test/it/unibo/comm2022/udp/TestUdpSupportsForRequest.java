@@ -12,6 +12,7 @@ import org.junit.Test;
 import it.unibo.comm2022.common.NaiveApplHandler;
 import it.unibo.comm2022.interfaces.Interaction2021;
 import it.unibo.comm2022.utils.BasicUtils;
+import it.unibo.comm2022.utils.ColorsOut;
 
 
 public class TestUdpSupportsForRequest {
@@ -23,7 +24,7 @@ public static final int testPort = 8111;
 	public void up() {
 	}
 	
-	@After
+	//@After
 	public void down() {
 		//if( server != null ) server.deactivate();
 	}	
@@ -39,27 +40,56 @@ public static final int testPort = 8111;
 	}
 	
 	@Test 
+	public void testManyConns() {
+		ColorsOut.out(" -------------- testManyConns");		
+		startTheServer("manyConnsServer");
+		 try {
+		     Interaction2021 conn  = UdpClientSupport.connect("localhost", testPort);
+			 for( int i=1; i<=3;i++) {
+				//Interaction2021 conn  = UdpClientSupport.connect("localhost", TestUdpSupportsForRequest.testPort);
+				String msg = "hello"+i  ;
+				System.out.println("testManyConns | forward the msg=" + msg + " on conn:" + conn);	 
+				conn.forward(msg);
+				BasicUtils.delay(100);
+				String answer = conn.receiveMsg();
+				System.out.println("testManyConns | fanswer=" + answer + " on conn:" + conn);	 
+				BasicUtils.delay(100);
+			 }//for
+		 } catch (Exception e) {
+			 fail();
+		 }
+		BasicUtils.delay(1000);
+		stopTheServer();
+		ColorsOut.out(" -------------- testManyConns BYE");
+	}
+	
+	@Test 
 	public void testSingleClient() throws Exception {
+		ColorsOut.out(" -------------- testSingleClient");
 		startTheServer("oneClientServer");
  		//Create a connection
 		new ClientDoingRequest().doWork("client1");		
 		System.out.println("tesSingleClient BYE");
 		stopTheServer();
+		ColorsOut.out(" -------------- testSingleClient BYE");
 	}
 	
 	
 	@Test 
 	public void testManyClients() throws Exception {
+		ColorsOut.out(" -------------- testManyClients");
 		startTheServer("manyClientsServer");
 		new ClientDoingRequest().doWork("client1");
 		new ClientDoingRequest().doWork("client2");
 		new ClientDoingRequest().doWork("client3");
 		System.out.println("testManyClients BYE");
 		stopTheServer();
+		ColorsOut.out(" -------------- testManyClients BYE");
 	}
 	
 	@Test 
 	public void testManyRequests() throws Exception {
+		ColorsOut.out(" -------------- testManyRequests");
 		NaiveApplHandler handler = new NaiveApplHandler("naiveHMod") {
 			int i = 0;
 			@Override
@@ -87,10 +117,12 @@ public static final int testPort = 8111;
 			assertTrue(answer!=null);
 		}
 		stopTheServer();
+		ColorsOut.out(" -------------- testManyRequests BYE");
 	}
 	
 	@Test 
 	public void serverClose() throws Exception {
+		ColorsOut.out(" -------------- serverClose");
 		NaiveApplHandler handler = new NaiveApplHandler("naiveHMod") {
 			int i = 0;
 			@Override
@@ -131,7 +163,7 @@ public static final int testPort = 8111;
 			System.out.println("client1" + " | receives the answer: " +answer );
 			assertTrue(answer!=null);
 		}
-		BasicUtils.delay(200); //give the server the time to make his tests
+		BasicUtils.delay(400); //give the server the time to make his tests
 		
 		String request = "hello_"+i;
 		//conn.forward(request); //this will actually work, because if no read are done the object have no way of knowing if a close packet did arrived or not
@@ -153,10 +185,12 @@ public static final int testPort = 8111;
 		assertTrue(answer!=null);
 		
 		stopTheServer();
+		ColorsOut.out(" -------------- serverClose BYE");
 	}
 	
 	@Test
 	public void closeConnFromClient() throws Exception {
+		ColorsOut.out(" -------------- closeConnFromClient");
 		NaiveApplHandler handler = new NaiveApplHandler("naiveHMod") {
 			int i = 0;
 			@Override
@@ -207,7 +241,7 @@ public static final int testPort = 8111;
 		assertNotSame(handler.serverConn, previousServerConn);
 		
 		stopTheServer();
-			
+		ColorsOut.out(" -------------- closeConnFromClient BYE");
 	}
 	
 }
