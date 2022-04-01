@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta charset="UTF-8">
+</head> 
+    <!--
+<link rel="stylesheet" type="text/css" href="../css/issStyle1.css">
+<script type="text/javascript" src="../css/issStyle.js"></script>
+-->
+<style type="text/css">
+body
+{
+    margin-left:  30px;
+    margin-right: 30px;
+};
+
+P
+{
+    font-family: Tahoma;
+    font-size: 10pt;
+};
+
+a, a:visited, a:active, a:link, a:hover {
+    text-decoration: underline;
+    color: #545454;
+    background-color: transparent;
+	font-size: 93%;
+}
+
+a:hover {
+    background-color: #cccccc;
+}
+
+
+hr {
+    clear: both;
+    height: 1px;
+    color: #242424;
+    background-color: transparent;
+}
+
+h1, h2, h3 {
+    color: #242424;
+    clear: left;
+    font: 100% Tahoma, Helvetica, Arial, sans-serif;
+    margin-bottom: 0.5em;
+    padding-top: 0.5em;
+	border-radius: 10px;
+	padding: 5px;
+}
+
+top {
+	width: 100%;
+}
+
+
+#i {
+    color: #ff1010;
+}
+tt{
+	font-family: "Arial";
+    font-size: 90%;
+	color: #006600;
+}
+em{
+	font-family: "Arial";
+    font-size: 80%;
+	font-weight: bold;
+	border-style:solid;
+	border-color: #abe876;
+    color: #1632cc;
+}
+bc{
+	font-family: "Arial";
+	font-size: 90%;
+	font-weight: bold;
+    color: #990000;
+	background-color: #fcf8c7;
+}
+ks{
+	font-family: "Arial";
+	font-weight: bold;
+    color: #0000CD	;
+	font-size: 90%;
+}
+kc{
+	font-family: "Arial";
+	font-weight: bold;
+    color: #008000	;
+	font-size: 90%;
+}
+pre{
+	font-family: "Consolas";
+	font-size: 85%;
+	background-color: #f5f5f5;
+	border: 1.5px solid silver;
+	padding: 5px;
+}
+m{
+	font-family: "Helvetica";
+	line-height: 100%;
+ 	font-size: 75%;
+}
+div.body{
+	 
+    font-size: 18px;
+}
+k{
+    color: #990000;
+	font-weight: bold;
+	font-size: 90%;
+}
+h1 {
+    font-size: 150%;
+    background-color: #b2c0ff;
+	padding: 10px;
+}
+
+h2 {
+    background-color: #9ed8ff;
+    font-size: 130%;
+}
+
+h3 {
+	background-color: #e6ccff;
+    font-size: 100%;
+}
+h4 {
+    background-color: #ccffcc;
+    font-size: 100%;
+	width: 95%;
+	border-radius: 5px;
+	padding: 2px;
+}
+h5 {
+    background-color: #d5ffb0;
+    font-size: 100%;
+
+}
+div.req{
+	background-color: #d9ffb3;
+    font-size: 18px;
+	width: 700px;
+    border: 3px solid green;
+    padding: 15px;
+    margin: 10px;
+}
+div.remark{
+	background-color: #E3F2FD;
+    border: 1.5px solid #d5f2ed;
+    padding: 15px;
+    margin: 10px;
+	border-radius: 25px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+ol, ul, li {
+  margin: 0;
+  margin-left: 10px;
+  padding: 0;
+  padding-bottom: 5px;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
+
+img {
+	border: 1.5px solid #d5f2ed
+
+}
+
+a, a:visited, a:active, a:link, a:hover {
+    text-decoration: underline;
+    color: #545454;
+    background-color: transparent;
+}
+
+div.wrapdesc{
+	width: 90%;
+	margin: auto;
+}
+
+div.imagedesc{
+	width: 85%;
+	margin: auto;
+}
+</style>
+    
+<head>
+   
+<title>radarSystem22</title></head>
+    
+<body>
+<div id="top">
+<h1>LABORATORIO DI INGEGNERIA DEI SISTEMI SOFTWARE <font size="5"></font> </h1>
+</div>  
+
+<div class="body"> 
+<h2>Introduction</h2>
+Sonar osservabile.
+ 
+<h2>Requirements</h2>
+<div class="remark">
+	<p>Si desidera realizzare una versione osservabile (<i>SonarObservable</i>) del dispositivo Sonar che soddisfi i seguenti requisiti: </p>
+	<ul>
+		<li> Il SonarObservable deve inviare informazioni a tutti componenti software interessati alla rilevazione dei valori di distanza; </li> 
+		<li> Il SonarObservable deve fornire valori di distanza solo quando questi si modificano in modo significativo; </li> 
+		<li> I componenti interessati ai valori di distanza prodotti dal SonarObservable sono denominati Observer e pssono risiedere sullo stesso nodo del SonarObservable (cioè sul RaspberryPi) o su un nodo remoto (ad esempio sul PC); </li> 
+	</ul>
+</div>
+
+ 
+
+<h2>Requirement analysis</h2>
+<div class="remark">
+	<p><b>User-story US1:</b> Ponendo un ostacolo a distanza fissa DTESTING1 davanti al sonar, tutti gli Observers ricevono il valore DTESTING1. Dopo un qualche tempo, si modifica la posizione dell’ostacolo a una nuova distanza DTESTING2 e si controlla che gli tutti gli Observers ricevano il valore DTESTING2 </p> 
+	<br>
+	<b> Domande: </b>
+	<ul>
+		<li>Cosa significa osservare un dispositivo? Significa osservare i valori prodotti o il suo stato interno (carica delle batterie, temperatura interna, rate di generazione dei dati, etc.)? → valori prodotti</li>
+		<li>Si può dire che il valore della distanza sia una proprietà del dispositivo di misura (cioè del Sonar)? → No, misura qualcosa di esterno</li>
+		<li>Se siamo convinti che si debbano osservare i valori prodotti pittosto che il dispositivo in sè, come formalizzare questo approccio nel caso del SonarObservable? → attraverso un linguaggio comprensibile alla macchina, come interfacce (di classi o funzioni)</li>
+	</ul>
+</div>
+
+<h2>Problem analysis</h2>
+<div class="remark">
+	<p>La transizione ad un Sonar osservabile prospettata in Il pattern observer può essere affrontata pensando il SonarObservable in due modi: </p>
+	<ul>
+		<li>Modo 1: <i>SonarObservable</i> che registra le entità che devono essere aggiornate, e che le notifica con l'invocazione di un metodo predefinito da esse posseduto</li>
+		<li>Modo 2: <i>SonarObservable</i> che offre la possibiltà di ottenere i valori aggrionati di una proprietà attraverso una callback</li>
+	</ul>
+	<p>La seconda possibilità risulta essere più pulita per alcune ragioni. </p>
+	<ul>
+		<li>La prima (meno importante) è che verrebbero usate meno interfacce. Gli osservatori non sono obbligati ad implementare interfacce e aggiungere i corrispondenti metodi attraverso i quali sono aggiornati</li>
+		<li>La seconda è che gli osservatori vengono aggiornati indipendentemente sulle singole proprietà sulle quali volgono essere aggiornati</li>
+		<li>Le routine di aggiornamento lato observer possono essere implementate tramite funzioni lambda</li>
+	</ul>
+	</p>
+</div>
+
+<h2>Test plans</h2>
+<div class="remark">
+	<p>Si pone un ostacolo a distanza DTESTING1 dal sensore → gli observers ricevono il valore DTESTING1</p>
+	<p>Si mantiene l'ostacolo alla stessa distanza per un certo tempo → gli observers alcun valore di aggiornamento</p>
+	<p>Si sposta l'ostacolo alla distanza DTESTING2 != DTESTING1 dal sensore → gli observers ricevono il valore DTESTING2</p>
+</div>
+
+<h2>Project</h2> 
+<div class="remark">
+	<ul>
+		<li>Nel package it.unibo.radarSystem22.domain.models si procede con l'estensione di <i>SonarModel</i> con la creazione di <i>SonarModelObservable</i> che implementa l'interfaccia <i>ISonarObservable</i> (<i>it.unibo.radarSystem22.domain.interfaces</i>) </li>
+		<li>Si costruisce una classe <i>SonarMockObservable</i> (<i>it.unibo.radarSystem22.domain.mock</i>) apposita per il test prima illustrato</li>
+		<li>Si genera l'implementazione specifica di <i>SonarConcrete</i> (<i>it.unibo.radarSystem22.domain</i>), che è identica a <i>SonarConcreteObservable</i> ma estende <i>SonarModelObservable</i> al posto di <i>SonarModel</i> e implementa <i>ISonarObservable</i> al posto di <i>ISonar</i></li>
+		<li>Creare la classe di test <i>TestSonarMockObservable</i></li>
+	</ul>
+</div>
+
+<h2>Testing</h2> 
+ 
+
+<h2>Deployment</h2> 
+
+ 
+<h2>Maintenance</h2> 
+ 
+<!-- USEFUL
+<table style="width:100%" border="1">
+<tr>
+<td style="width:50%">
+</td>
+<td></td>
+</tr>
+</table>
+-->
+	      	
+<br/><br/> 	
+</div>  
+
+<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white;padding-left: 0.5%;">
+<p>By Loris Giannatempo <br>
+Email: loris.giannatempo@studio.unibo.it <br>
+Git: https://github.com/LorisGiann/ISS-projects</p>
+<img alt="mbot" src="img/me.jpg" width="30%" height="30%">
+
+
+</div> 
+
+</body>
+</html>
