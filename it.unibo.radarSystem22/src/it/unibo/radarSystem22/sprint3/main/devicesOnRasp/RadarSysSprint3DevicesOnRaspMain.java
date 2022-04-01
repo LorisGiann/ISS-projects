@@ -53,7 +53,7 @@ public class RadarSysSprint3DevicesOnRaspMain implements IApplication{
 	
 			RadarSystemConfig.tracing           = false;		
 			RadarSystemConfig.RadarGuiRemote    = true;		
-			RadarSystemConfig.protcolType       = ProtocolType.tcp;		
+			RadarSystemConfig.protcolType       = ProtocolType.udp;		
 		}
  
 	}
@@ -84,5 +84,8 @@ public class RadarSysSprint3DevicesOnRaspMain implements IApplication{
 	public static void main( String[] args) throws Exception {
 		BasicUtils.aboutThreads("At INIT with NO CONFIG files| ");
 		new RadarSysSprint3DevicesOnRaspMain().doJob(null,null);
+		
+		//BasicUtils.aboutThreads("At INIT with CONFIG files| ");
+		//new RadarSysSprint3DevicesOnRaspMain().doJob("DomainSystemConfig.json","RadarSystemConfig.json");
   	}
 }

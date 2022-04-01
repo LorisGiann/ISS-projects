@@ -11,5 +11,8 @@
 "_comment_"        : "SPINT 2a",
 "ledPort"          : "8010",
 "sonarPort"        : "8015",
-"raspAddr"         : "192.168.1.115"
+"raspAddr"         : "192.168.43.167",
+
+"__comment__"      : "SPINT 3",
+"protocolType"     : "udp"
 }

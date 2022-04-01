@@ -30,7 +30,7 @@ public class RadarSysSprint3ControllerOnPcMain implements IApplication{
 	
 	@Override
 	public void doJob(String domainConfig, String systemConfig ) {
-		setup( );
+		setup(domainConfig, systemConfig);
 		configure();
 		//start
 	    ActionFunction endFun = (n) -> { 
@@ -40,18 +40,28 @@ public class RadarSysSprint3ControllerOnPcMain implements IApplication{
 		controller.start(endFun, 30);		
 	}
 	
-	public void setup(  )  {	
-		DomainSystemConfig.testing      	= false;			
-		DomainSystemConfig.sonarDelay       = 200;
-		//Su PC
-		DomainSystemConfig.simulation   	= true;
-		
-		RadarSystemConfig.DLIMIT      		= 70;  
-		RadarSystemConfig.RadarGuiRemote    = false;		
-		RadarSystemConfig.raspAddr          = "localhost"; //"192.168.1.9";		 	
-		RadarSystemConfig.protcolType       = ProtocolType.tcp;	
-		
-		CommSystemConfig.tracing            = false;
+	public void setup(String domainConfig, String systemConfig  )  {
+		BasicUtils.aboutThreads(getName() + " | Before setup ");
+	    CommSystemConfig.tracing            = true;
+		if( domainConfig != null ) {
+			DomainSystemConfig.setTheConfiguration(domainConfig);
+		}
+		if( systemConfig != null ) {
+			RadarSystemConfig.setTheConfiguration(systemConfig);
+		}
+		if( domainConfig == null && systemConfig == null) {
+			DomainSystemConfig.testing      	= false;			
+			DomainSystemConfig.sonarDelay       = 200;
+			//Su PC
+			DomainSystemConfig.simulation   	= true;
+			
+			RadarSystemConfig.DLIMIT      		= 70;  
+			RadarSystemConfig.RadarGuiRemote    = true;
+			RadarSystemConfig.raspAddr          = "localhost"; 	//"192.168.43.167";//	 	
+			RadarSystemConfig.protcolType       = ProtocolType.udp;	
+			
+			CommSystemConfig.tracing            = false;
+		}
 	}
 	
 	public void configure(  )  {	
@@ -81,7 +91,10 @@ public class RadarSysSprint3ControllerOnPcMain implements IApplication{
 	}
 
 	public static void main( String[] args) throws Exception {
-		BasicUtils.aboutThreads("At INIT with NO CONFIG files| ");
-		new RadarSysSprint3ControllerOnPcMain().doJob( null,null );
+		//BasicUtils.aboutThreads("At INIT with NO CONFIG files| ");
+		//new RadarSysSprint3ControllerOnPcMain().doJob( null,null );
+		
+		BasicUtils.aboutThreads("At INIT with CONFIG files | ");
+		new RadarSysSprint3ControllerOnPcMain().doJob("DomainSystemConfig.json","RadarSystemConfig.json");
   	}	
 }

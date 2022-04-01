@@ -1,0 +1,13 @@
+{
+"DLIMIT"           : "70",
+"RadarGuiRemote"   : "false",
+"tracing"          : "false",
+"testing"          : "false",
+
+"hostAddr"         : "localhost",
+"raspAddr"         : "192.168.43.167",
+"ctxServerPort"    : "8023",
+"ledPort"          : "8010",
+"sonarPort"        : "8015",
+"protocolType"     : "tcp"
+}
