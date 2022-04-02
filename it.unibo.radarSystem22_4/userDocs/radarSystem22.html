@@ -207,8 +207,8 @@ Sonar osservabile.
 <div class="remark">
 	<p>Si desidera realizzare una versione osservabile (<i>SonarObservable</i>) del dispositivo Sonar che soddisfi i seguenti requisiti: </p>
 	<ul>
-		<li> Il SonarObservable deve inviare informazioni a tutti componenti software interessati alla rilevazione dei valori di distanza; </li> 
-		<li> Il SonarObservable deve fornire valori di distanza solo quando questi si modificano in modo significativo; </li> 
+		<li> Il <i>SonarObservable</i> deve inviare informazioni a tutti componenti software interessati alla rilevazione dei valori di distanza; </li> 
+		<li> Il <i>SonarObservable</i> deve fornire valori di distanza solo quando questi si modificano in modo significativo; </li> 
 		<li> I componenti interessati ai valori di distanza prodotti dal SonarObservable sono denominati Observer e pssono risiedere sullo stesso nodo del SonarObservable (cioè sul RaspberryPi) o su un nodo remoto (ad esempio sul PC); </li> 
 	</ul>
 </div>
@@ -229,35 +229,36 @@ Sonar osservabile.
 
 <h2>Problem analysis</h2>
 <div class="remark">
-	<p>La transizione ad un Sonar osservabile prospettata in Il pattern observer può essere affrontata pensando il SonarObservable in due modi: </p>
+	<p>La transizione ad un Sonar osservabile può essere affrontata pensando il SonarObservable in due modi: </p>
 	<ul>
 		<li>Modo 1: <i>SonarObservable</i> che registra le entità che devono essere aggiornate, e che le notifica con l'invocazione di un metodo predefinito da esse posseduto</li>
-		<li>Modo 2: <i>SonarObservable</i> che offre la possibiltà di ottenere i valori aggrionati di una proprietà attraverso una callback</li>
+		<li>Modo 2: <i>SonarObservable</i> che offre la possibiltà di ottenere i valori aggiornati di una proprietà attraverso una callback</li>
 	</ul>
-	<p>La seconda possibilità risulta essere più pulita per alcune ragioni. </p>
+	<p>La seconda possibilità risulta essere più pulita per alcune ragioni: </p>
 	<ul>
-		<li>La prima (meno importante) è che verrebbero usate meno interfacce. Gli osservatori non sono obbligati ad implementare interfacce e aggiungere i corrispondenti metodi attraverso i quali sono aggiornati</li>
-		<li>La seconda è che gli osservatori vengono aggiornati indipendentemente sulle singole proprietà sulle quali volgono essere aggiornati</li>
+		<li>Gli osservatori vengono aggiornati indipendentemente sulle singole proprietà sulle quali vogliono essere aggiornati</li>
+		<li>Verrebbero usate meno interfacce. Gli osservatori non sono obbligati ad implementare interfacce e aggiungere i corrispondenti metodi attraverso i quali sono aggiornati</li>
 		<li>Le routine di aggiornamento lato observer possono essere implementate tramite funzioni lambda</li>
 	</ul>
-	</p>
+	<p>Un terzo modo potrebbe essere l'introduzione di una entità che offra la possibilità agli observers di registrarsi per ottenere aggiornamenti su un determinato valore, e offra allo stesso tempo ai soggetti la possibilità di notificare l'aggiornamento del valore quanto avviene. L'entità farebbe quindi da intermediario, e questo porterebbe ad alcuni benefici:</p>
+	<ul>
+		<li>Unica entità per inviare e ricevere aggiornametni, dove il contratto di aggiornamento è determinato da questa terza entità, e non più dallo secifico soggetto. Subject e Observer dipendono quindi dalle interfacce del terzo componente, il subject dovrà invocare uno pecifico metodo del "broker" (specificando il valore che vuole aggiornare) e  gli observer devono esporre un certo metodo per esssere aggiornati (cioè devono implementare una certa interfaccia definita dall'entità) </li>
+		<li>Disaccoppiamento: Il consumer non conosce il producer. E' quindi possibile, ad esempio, sostituire il produttore vero e proprio con un proxy senza che il consumer debba essere modificato</li>
+	</ul>
 </div>
 
 <h2>Test plans</h2>
 <div class="remark">
 	<p>Si pone un ostacolo a distanza DTESTING1 dal sensore → gli observers ricevono il valore DTESTING1</p>
-	<p>Si mantiene l'ostacolo alla stessa distanza per un certo tempo → gli observers alcun valore di aggiornamento</p>
+	<p>Si mantiene l'ostacolo alla stessa distanza per un certo tempo → gli observers non ricevono alcun valore di aggiornamento</p>
 	<p>Si sposta l'ostacolo alla distanza DTESTING2 != DTESTING1 dal sensore → gli observers ricevono il valore DTESTING2</p>
 </div>
 
 <h2>Project</h2> 
 <div class="remark">
-	<ul>
-		<li>Nel package it.unibo.radarSystem22.domain.models si procede con l'estensione di <i>SonarModel</i> con la creazione di <i>SonarModelObservable</i> che implementa l'interfaccia <i>ISonarObservable</i> (<i>it.unibo.radarSystem22.domain.interfaces</i>) </li>
-		<li>Si costruisce una classe <i>SonarMockObservable</i> (<i>it.unibo.radarSystem22.domain.mock</i>) apposita per il test prima illustrato</li>
-		<li>Si genera l'implementazione specifica di <i>SonarConcrete</i> (<i>it.unibo.radarSystem22.domain</i>), che è identica a <i>SonarConcreteObservable</i> ma estende <i>SonarModelObservable</i> al posto di <i>SonarModel</i> e implementa <i>ISonarObservable</i> al posto di <i>ISonar</i></li>
-		<li>Creare la classe di test <i>TestSonarMockObservable</i></li>
-	</ul>
+	<p>Sono state estese e create le classi per testare la modalità 1 e 2, secondo l'immagine che segue:</p>
+	<center><img src="img/observer.png" width="60%"></center>
+	<p>Inoltre sono state create le classi di test <a href="../../it.unibo.radarSystem22.domain/test/it/unibo/radarSystem22/domain/test/TestSonarMockObservable_lambda.java"><i>TestSonarMockObservable_lambda</i></a> e <a href="../../it.unibo.radarSystem22.domain/test/it/unibo/radarSystem22/domain/test/TestSonarMockObservable_traditional.java"><i>TestSonarMockObservable_traditional</i></a> </p>
 </div>
 
 <h2>Testing</h2> 

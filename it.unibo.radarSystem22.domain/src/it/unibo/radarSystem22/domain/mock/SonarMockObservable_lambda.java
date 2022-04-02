@@ -1,17 +1,22 @@
 package it.unibo.radarSystem22.domain.mock;
 
+import java.util.function.Consumer;
+
 import it.unibo.radarSystem22.domain.Distance;
 import it.unibo.radarSystem22.domain.interfaces.IDistance;
 import it.unibo.radarSystem22.domain.interfaces.ISonar;
+import it.unibo.radarSystem22.domain.interfaces.ISonarObservable_lambda;
+import it.unibo.radarSystem22.domain.models.SonarModelObservable_lambda;
 import it.unibo.radarSystem22.domain.models.SonarModel;
 import it.unibo.radarSystem22.domain.utils.ColorsOut;
 import it.unibo.radarSystem22.domain.utils.DomainSystemConfig;
 
-public class SonarMock extends SonarModel implements ISonar {
+public class SonarMockObservable_lambda extends SonarModelObservable_lambda implements ISonarObservable_lambda {
+//same code of SonarMockObservable_traditional
 	
 	private long startTime = -1;
 	
-	public SonarMock() {
+	public SonarMockObservable_lambda() {
 		curVal = new Distance(90);
 	}
 	
@@ -25,13 +30,13 @@ public class SonarMock extends SonarModel implements ISonar {
 	protected void sonarProduce() {
 		if( DomainSystemConfig.testing ) {	//produces always the same value
 			updateDistance( DomainSystemConfig.testingDistance );
-		}else {
+		}else{
 			if(startTime<0)startTime=System.currentTimeMillis();
-			long interval = (System.currentTimeMillis()-startTime)/DomainSystemConfig.sonarDelay;
-			if(interval<90) {
-				updateDistance((int)(90-interval));
+			boolean interval = (System.currentTimeMillis()-startTime)>DomainSystemConfig.sonarDelay;
+			if(interval) {
+				updateDistance(100);
 			}else {
-				updateDistance(0);
+				updateDistance(curVal.getVal());
 			}
 		}
 	}

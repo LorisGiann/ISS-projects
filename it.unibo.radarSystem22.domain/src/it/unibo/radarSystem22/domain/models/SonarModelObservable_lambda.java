@@ -7,10 +7,10 @@ import java.util.function.Supplier;
 
 import it.unibo.radarSystem22.domain.Distance;
 import it.unibo.radarSystem22.domain.interfaces.IDistance;
-import it.unibo.radarSystem22.domain.interfaces.ISonarObservable;
+import it.unibo.radarSystem22.domain.interfaces.ISonarObservable_lambda;
 import it.unibo.radarSystem22.domain.utils.ColorsOut;
 
-public abstract class SonarModelObservable extends SonarModel implements ISonarObservable {
+public abstract class SonarModelObservable_lambda extends SonarModel implements ISonarObservable_lambda {
 
 	private static final int DELTA_UPDATE = 0; //new value is considered only if the difference with the already registered one is greter than this value. 0 means updated only if changed by one or grater
 
@@ -23,12 +23,12 @@ public abstract class SonarModelObservable extends SonarModel implements ISonarO
 	}
 	
 	@Override
-	public void registerForDistance(Consumer<IDistance> callback) {
+	public void register(Consumer<IDistance> callback) {
 		callbacks.add(callback);
 	}
 
 	@Override
-	public void unregisterForDistance(Consumer<IDistance> callback) {
+	public void unregister(Consumer<IDistance> callback) {
 		callbacks.remove(callback);
 	}
 	

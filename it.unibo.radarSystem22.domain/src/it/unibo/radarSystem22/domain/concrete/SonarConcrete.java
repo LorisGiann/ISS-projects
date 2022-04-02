@@ -17,11 +17,10 @@ public class SonarConcrete extends SonarModel implements ISonar{
 	private Process p ;
 	
 	/*
-	 * curVal è usata come valore della distanza corrente misurata
+	 * curVal ï¿½ usata come valore della distanza corrente misurata
 	 */
-	@Override
-	protected void sonarSetUp() {//called by SonarModel constructor
-		curVal = new Distance(90);	
+	public SonarConcrete() {//called by SonarModel constructor
+		curVal = new Distance(90);
 	}
 
 	

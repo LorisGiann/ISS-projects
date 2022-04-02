@@ -15,8 +15,13 @@ protected  IDistance curVal = new Distance(90);
 //NOTE: Accesses and updates to the memory cells corresponding to fields of any 
 // type except long or double are guaranteed to be atomic
 
-protected boolean stopped = true;
- 	
+	protected boolean stopped = true;
+
+	protected SonarModel() {//hidden costructor, to force setup
+		ColorsOut.out("SonarModel | calling (specialized) sonarSetUp ", ColorsOut.BLUE );
+		//sonarSetUp();   now in the solnar itself
+	}
+
 	public static ISonar create() {
 		if( DomainSystemConfig.simulation )  return createSonarMock();
 		else  return createSonarConcrete();		
@@ -29,11 +34,6 @@ protected boolean stopped = true;
 	public static ISonar createSonarConcrete() {
 		ColorsOut.out("createSonarConcrete", ColorsOut.BLUE);
 		return new SonarConcrete();
-	}	
-	
-	protected SonarModel() {//hidden costructor, to force setup
-		ColorsOut.out("SonarModel | calling (specialized) sonarSetUp ", ColorsOut.BLUE );
-		sonarSetUp();   
 	}
 	
 	protected void updateDistance( int d ) { //called by concrete and mock objects on new measure
@@ -41,8 +41,8 @@ protected boolean stopped = true;
 		ColorsOut.out("SonarModel | updateDistance "+ d, ColorsOut.BLUE);
 	}	
 
-	protected abstract void sonarSetUp() ;
- 	protected abstract void sonarProduce() ;
+	//protected abstract void sonarSetUp(); //  now in the sonar itself
+ 	protected abstract void sonarProduce();
 
 	@Override
 	public boolean isActive() {

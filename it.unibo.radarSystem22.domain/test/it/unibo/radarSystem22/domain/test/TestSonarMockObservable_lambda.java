@@ -9,17 +9,17 @@ import org.junit.Test;
 
 import it.unibo.radarSystem22.domain.interfaces.ILed;
 import it.unibo.radarSystem22.domain.interfaces.ISonar;
-import it.unibo.radarSystem22.domain.interfaces.ISonarObservable;
+import it.unibo.radarSystem22.domain.interfaces.ISonarObservable_lambda;
 import it.unibo.radarSystem22.domain.mock.LedMock;
 import it.unibo.radarSystem22.domain.mock.SonarMock;
-import it.unibo.radarSystem22.domain.mock.SonarMockObservable;
+import it.unibo.radarSystem22.domain.mock.SonarMockObservable_lambda;
 import it.unibo.radarSystem22.domain.utils.BasicUtils;
 import it.unibo.radarSystem22.domain.utils.ColorsOut;
 import it.unibo.radarSystem22.domain.utils.DomainSystemConfig;
 
-public class TestSonarMockObservable {
+public class TestSonarMockObservable_lambda {
 
-		private ISonarObservable sonar;
+		private ISonarObservable_lambda sonar;
 		
 		private int countCallbacks;
 		private int callbackLastVal;
@@ -33,7 +33,7 @@ public class TestSonarMockObservable {
 		@Before
 		public void init() {
 			countCallbacks = 0;
-			sonar = new SonarMockObservable();
+			sonar = new SonarMockObservable_lambda();
 		}
 		
 		@After
@@ -45,7 +45,7 @@ public class TestSonarMockObservable {
 		public void test() {
 			DomainSystemConfig.sonarDelay = 50;
 			
-			sonar.registerForDistance( (d)->{callbackLastVal=d.getVal(); countCallbacks++; System.out.println("Callback: "+d);} );
+			sonar.register( (d)->{callbackLastVal=d.getVal(); countCallbacks++; System.out.println("Callback: "+d);} );
 			
 			sonar.activate();
 			
