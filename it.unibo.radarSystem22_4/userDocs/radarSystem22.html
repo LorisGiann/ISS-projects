@@ -210,6 +210,7 @@ Sonar osservabile.
 		<li> Il <i>SonarObservable</i> deve inviare informazioni a tutti componenti software interessati alla rilevazione dei valori di distanza; </li> 
 		<li> Il <i>SonarObservable</i> deve fornire valori di distanza solo quando questi si modificano in modo significativo; </li> 
 		<li> I componenti interessati ai valori di distanza prodotti dal SonarObservable sono denominati Observer e pssono risiedere sullo stesso nodo del SonarObservable (cioè sul RaspberryPi) o su un nodo remoto (ad esempio sul PC); </li> 
+		<li> Il funzionamento del SonarObservable deve essere testato in modo automatizzato ponendo un ostacolo a distanza fissa DTESTING1 davanti ad esso, controllando che tutti gli Observers ricevano il valore DTESTING1. Dopo un qualche tempo, si modifica la posizione dell’ostacolo a una nuova distanza DTESTING2 e si controlla che gli tutti gli Observers ricevano il valore DTESTING2. </li>
 	</ul>
 </div>
 
@@ -240,10 +241,13 @@ Sonar osservabile.
 		<li>Verrebbero usate meno interfacce. Gli osservatori non sono obbligati ad implementare interfacce e aggiungere i corrispondenti metodi attraverso i quali sono aggiornati</li>
 		<li>Le routine di aggiornamento lato observer possono essere implementate tramite funzioni lambda</li>
 	</ul>
-	<p>Un terzo modo potrebbe essere l'introduzione di una entità che offra la possibilità agli observers di registrarsi per ottenere aggiornamenti su un determinato valore, e offra allo stesso tempo ai soggetti la possibilità di notificare l'aggiornamento del valore quanto avviene. L'entità farebbe quindi da intermediario, e questo porterebbe ad alcuni benefici:</p>
+	<h5>UPDATE dopo lezione 05/04:</h5>
+	<p>La proprietà è osservabile, ossia è un oggetto che è una proprietà del sonar, che viene aggiornata direttamente dal sonar (come curVal) e che pensa lui internametne a fare il dispatch agli osservatori. Gli osservatori non si registrano al sonar, ma alla priorietà del sonar.</p>
+	<p>Osservazione: non sarebbe cosa buona e giusta creare questo oggetto-proprietà come un tipo generico, in modo che tutto il sistema possa usare le stesse interfacce per ogni tipo di proprietà osservabile? Il contratto di aggiornamento diventerebbe così uno standard determinato da una terza entità "esterna", e non più dallo secifico soggetto. Subject e Observer dipendono quindi dalle interfacce del terzo componente, il subject dovrà invocare uno pecifico metodo del "broker" (specificando il valore che vuole aggiornare) e  gli observer devono esporre un certo metodo per esssere aggiornati (cioè devono implementare una certa interfaccia definita dall'entità) </li>
+	<p>Vantaggi:<p>
 	<ul>
-		<li>Unica entità per inviare e ricevere aggiornametni, dove il contratto di aggiornamento è determinato da questa terza entità, e non più dallo secifico soggetto. Subject e Observer dipendono quindi dalle interfacce del terzo componente, il subject dovrà invocare uno pecifico metodo del "broker" (specificando il valore che vuole aggiornare) e  gli observer devono esporre un certo metodo per esssere aggiornati (cioè devono implementare una certa interfaccia definita dall'entità) </li>
-		<li>Disaccoppiamento: Il consumer non conosce il producer. E' quindi possibile, ad esempio, sostituire il produttore vero e proprio con un proxy senza che il consumer debba essere modificato</li>
+		<li>Single responsability Principle: è compito della priorietà contenete la misura a occuparsi di aggiornare chi desidera osservarla, non dell'intero sonar</li>
+		<li>Possibile un ulteriore disaccoppiamento: ora come ora colui che viene osservato non conosce chi lo osserverà, ma chi osserva deve avere un riferimento a cosa vuole osservare per richiedere la proprietà osservata. Ma può anche farlo un intermediario al posto suo, con il vantaggio che l'intermediario può formire a chi ne fa richiesta una proprietà osservabile di un altro componente senza cambiare nulla dell'osservatore. è quindi possibile, per esempio, sostituire il produttore vero e proprio con un proxy senza che il consumer debba essere modificato</li>
 	</ul>
 </div>
 
@@ -259,6 +263,10 @@ Sonar osservabile.
 	<p>Sono state estese e create le classi per testare la modalità 1 e 2, secondo l'immagine che segue:</p>
 	<center><img src="img/observer.png" width="60%"></center>
 	<p>Inoltre sono state create le classi di test <a href="../../it.unibo.radarSystem22.domain/test/it/unibo/radarSystem22/domain/test/TestSonarMockObservable_lambda.java"><i>TestSonarMockObservable_lambda</i></a> e <a href="../../it.unibo.radarSystem22.domain/test/it/unibo/radarSystem22/domain/test/TestSonarMockObservable_traditional.java"><i>TestSonarMockObservable_traditional</i></a> </p>
+
+	<h5>UPDATE dopo lezione 05/04:</h5>
+	<p>Implementazione con modalità discusse</p>
+	<center><img src="img/observer_with_observable_distance.png" width="60%"></center>
 </div>
 
 <h2>Testing</h2> 
