@@ -243,11 +243,11 @@ Sonar osservabile.
 	</ul>
 	<h5>UPDATE dopo lezione 05/04:</h5>
 	<p>La proprietà è osservabile, ossia è un oggetto che è una proprietà del sonar, che viene aggiornata direttamente dal sonar (come curVal) e che pensa lui internametne a fare il dispatch agli osservatori. Gli osservatori non si registrano al sonar, ma alla priorietà del sonar.</p>
-	<p>Osservazione: non sarebbe cosa buona e giusta creare questo oggetto-proprietà come un tipo generico, in modo che tutto il sistema possa usare le stesse interfacce per ogni tipo di proprietà osservabile? Il contratto di aggiornamento diventerebbe così uno standard determinato da una terza entità "esterna", e non più dallo secifico soggetto. Subject e Observer dipendono quindi dalle interfacce del terzo componente, il subject dovrà invocare uno pecifico metodo del "broker" (specificando il valore che vuole aggiornare) e  gli observer devono esporre un certo metodo per esssere aggiornati (cioè devono implementare una certa interfaccia definita dall'entità) </li>
+	<p>Osservazione: non sarebbe cosa buona e giusta creare questo oggetto-proprietà come un tipo generico, in modo che tutto il sistema possa usare le stesse interfacce per ogni tipo di proprietà osservabile? Il contratto di aggiornamento diventerebbe così uno standard determinato da una terza entità "esterna", e non più dallo secifico soggetto. Subject e Observer dipendono quindi dalle interfacce del terzo componente</p>
 	<p>Vantaggi:<p>
 	<ul>
-		<li>Single responsability Principle: è compito della priorietà contenete la misura a occuparsi di aggiornare chi desidera osservarla, non dell'intero sonar</li>
-		<li>Possibile un ulteriore disaccoppiamento: ora come ora colui che viene osservato non conosce chi lo osserverà, ma chi osserva deve avere un riferimento a cosa vuole osservare per richiedere la proprietà osservata. Ma può anche farlo un intermediario al posto suo, con il vantaggio che l'intermediario può formire a chi ne fa richiesta una proprietà osservabile di un altro componente senza cambiare nulla dell'osservatore. è quindi possibile, per esempio, sostituire il produttore vero e proprio con un proxy senza che il consumer debba essere modificato</li>
+		<li>Single Responsibility Principle: è compito della priorietà contenete la misura occuparsi di aggiornare chi desidera osservarla, non dell'intero sonar</li>
+		<li>Possibile un ulteriore disaccoppiamento: Con observer "tradizionale" colui che osserva deve avere un riferimento al subject per richiedere la registrazione. Ma ora può anche essere un intermediario a fornire le proprietà da osservare, con il vantaggio che l'intermediario può fornire una proprietà osservabile di un altro componente senza cambiare nulla dell'osservatore. E' quindi possibile, per esempio, sostituire il produttore vero e proprio con un proxy senza che il consumer debba essere modificato</li>
 	</ul>
 </div>
 
