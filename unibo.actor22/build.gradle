@@ -7,7 +7,7 @@
 plugins {
     id 'java'
     id 'eclipse'
-    //id 'application'
+    id 'application'
 	id 'jacoco'
 }
 repositories {
@@ -60,6 +60,7 @@ dependencies {
 sourceSets {
     main.java.srcDirs += 'src'
     main.java.srcDirs += 'resources'
+    main.java.srcDirs += 'test' //main clas RSActor22onRasp.java in test
     test.java.srcDirs += 'test'
 }
 
@@ -70,23 +71,43 @@ eclipse {
     }
 }
 
- 
-//mainClassName = 'it.unibo.xxx' //TODO
+mainClassName = 'unibo.actor22.local.RSActor22onRasp'
 
 jar {
     from sourceSets.main.allSource
-    //manifest { attributes 'Main-Class': "$mainClassName" }
+    manifest { attributes 'Main-Class': "$mainClassName" }
 }
 
-/*
+
 distributions {
     main {
         contents {
-            from './RadarSystemConfig.json'
+            //from './RadarSystemConfig.json'
         }
     }
 }
 
+/*
+./gradlew distTar
+./gradlew distTar -x test
+*/
+/*
+IP=192.168.1.115
+TARNAME=unibo.actor22-1.1
+DEPLOY_DIRNAME=unibo_actor
+PROJECT_NAME=unibo.actor22
+
+ssh pi@$IP "mkdir -p loris-radar/$DEPLOY_DIRNAME"
+ssh pi@$IP "rm -f loris-radar/$DEPLOY_DIRNAME/$TARNAME.tar"
+scp /home/loris/Desktop/lorisIssLab2022/$PROJECT_NAME/build/distributions/$TARNAME.tar pi@$IP:"loris-radar/$DEPLOY_DIRNAME/$TARNAME.tar"
+ssh pi@$IP "rm -rf loris-radar/$DEPLOY_DIRNAME/$TARNAME"
+ssh pi@$IP "tar -C loris-radar/$DEPLOY_DIRNAME/ -xvpf loris-radar/$DEPLOY_DIRNAME/$TARNAME.tar"
+ssh pi@$IP "cp ~/loris-radar/bin_executables/{SonarAlone,led25GpioTurnOff.sh,led25GpioTurnOn.sh} ~/loris-radar/$DEPLOY_DIRNAME/$TARNAME/bin"
+ssh pi@$IP "~/loris-radar/$DEPLOY_DIRNAME/$TARNAME/bin/$PROJECT_NAME"
+*/
+
+
+/*
 git rm --cached .project
 git rm --cached .classpath
 */ 

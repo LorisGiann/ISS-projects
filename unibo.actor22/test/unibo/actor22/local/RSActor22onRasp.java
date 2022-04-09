@@ -6,6 +6,7 @@ import unibo.actor22.*;
 import unibo.actor22.common.ApplData;
 import unibo.actor22.common.ControllerActor;
 import unibo.actor22.common.LedActor;
+import unibo.actor22.common.SonarActor;
 import unibo.actor22comm.utils.ColorsOut;
 import unibo.actor22comm.utils.CommSystemConfig;
 import unibo.actor22comm.utils.CommUtils;
@@ -15,11 +16,11 @@ import unibo.actor22comm.utils.CommUtils;
  * Sistema che usa led e controller come attori locali
  */
  
-public class UsingLedAndControllerOnPc {
+public class RSActor22onRasp {
    
 
 	public void doJob() {
-		ColorsOut.outappl("ControllerUsingLedOnPc | Start", ColorsOut.BLUE);
+		ColorsOut.outappl(this.getClass().getName() +" | Start", ColorsOut.BLUE);
 		configure();
 		CommUtils.aboutThreads("Before execute - ");
 		//CommUtils.waitTheUser();
@@ -29,12 +30,15 @@ public class UsingLedAndControllerOnPc {
 	
 
 	protected void configure() {
-		DomainSystemConfig.simulation   = true;			
-		DomainSystemConfig.ledGui       = true;			
-		DomainSystemConfig.tracing      = false;					
+		DomainSystemConfig.simulation   = false;
+		DomainSystemConfig.ledGui       = false;
+		DomainSystemConfig.tracing      = true;
 		CommSystemConfig.tracing        = false;
+		DomainSystemConfig.DLIMIT       = 30;
+		DomainSystemConfig.sonarDistanceMax = 400;
 
 		new LedActor(ApplData.ledName);
+		new SonarActor(ApplData.sonarName);
 		new ControllerActor( ApplData.controllerName );
 		
 		//Creo altri Led per verificare che il numero di thread non aumenta
@@ -52,14 +56,14 @@ public class UsingLedAndControllerOnPc {
 
 	public void terminate() {
 		CommUtils.aboutThreads("Before exit - ");
-		CommUtils.delay(3000);
+		CommUtils.delay(30000);
 		System.exit(0);
 	}
 
 
 	public static void main( String[] args) {
 		CommUtils.aboutThreads("Before start - ");
-		new UsingLedAndControllerOnPc().doJob();
+		new RSActor22onRasp().doJob();
 		CommUtils.aboutThreads("Before end - ");
 	}
 

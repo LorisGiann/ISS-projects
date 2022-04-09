@@ -20,7 +20,7 @@ import unibo.actor22comm.utils.CommUtils;
  private IApplMessage getState ;
  
 	public void doJob() {
-		ColorsOut.outappl("UsingLedNoControllerOnPc | Start", ColorsOut.BLUE);
+		ColorsOut.outappl(this.getClass().getName() + " | Start", ColorsOut.BLUE);
 		configure();
 		BasicUtils.aboutThreads("Before execute - ");
 		//BasicUtils.waitTheUser();

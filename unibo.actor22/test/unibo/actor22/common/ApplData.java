@@ -15,8 +15,11 @@ public class ApplData {
 	public static final String comdLedoff  = "turnOff";
 	public static final String reqLedState = "getState";
 
+	public static final String sonarName    = "sonar";
 	public static final String cmdActivate  = "activate";
 	public static final String cmdDectivate = "deactivate";
+	public static final String reqIsActive  = "isActive";
+	public static final String reqDistance  = "getDistance";
 
 	public static final String evEndWork    = "endWork";
 
@@ -26,13 +29,18 @@ public class ApplData {
 	public static final IApplMessage turnOnLed    = buildDispatch(controllerName, "cmd", comdLedon,   ledName);
 	public static final IApplMessage turnOffLed   = buildDispatch(controllerName, "cmd", comdLedoff,  ledName);
 	
+	public static final IApplMessage activateSonar    = buildDispatch(controllerName, "cmd", cmdActivate,   sonarName);
+	public static final IApplMessage deactivateSonar  = buildDispatch(controllerName, "cmd", cmdDectivate,  sonarName);
+	public static final IApplMessage isActiveSonar    = buildRequest(controllerName, "cmd", reqIsActive,   sonarName);
+	public static final IApplMessage reqDistanceSonar = buildRequest(controllerName, "cmd", reqDistance,   sonarName);
+	
 	public static final  IApplMessage activateCrtl = buildDispatch("main", "cmd", cmdActivate, controllerName);
 	
 	public static final  IApplMessage endWorkEvent = buildEvent(controllerName, evEndWork, evEndWork );
 	
 	
 //String MSGID, String MSGTYPE, String SENDER, String RECEIVER, String CONTENT, String SEQNUM
-	private static int msgNum=0;	
+	private static int msgNum=0;
 
 	public static IApplMessage buildDispatch(String sender, String msgId, String payload, String dest) {
 		try {
