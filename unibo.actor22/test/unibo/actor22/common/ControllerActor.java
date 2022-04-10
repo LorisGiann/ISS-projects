@@ -71,7 +71,7 @@ public class ControllerActor extends QakActor22{
 	protected void elabAnswer(IApplMessage msg) {
 		ColorsOut.outappl( getName()  + " | elabAnswer numIter=" + numIter + " "+ msg, ColorsOut.MAGENTA);
 		if(numIter==0) {
-			if(msg.msgSender()==ApplData.sonarName) {
+			if(msg.msgSender().equals(ApplData.sonarName)) {
 				if(msg.msgContent()=="false") {
 					ColorsOut.outappl(getName() + " | sonar initialization failed ", ColorsOut.RED);
 					stop();
@@ -83,7 +83,7 @@ public class ControllerActor extends QakActor22{
 				ColorsOut.outappl(getName() + " | unexpected message ", ColorsOut.RED);
 			}
 		} else if( state == 1 ) {
-			if(msg.msgSender()==ApplData.sonarName) {
+			if(msg.msgSender().equals(ApplData.sonarName)) {
 				IDistance dist = new Distance(msg.msgContent());
 				if( dist.getVal() < DomainSystemConfig.DLIMIT) {
 					ledRequiredState = true;
@@ -98,7 +98,7 @@ public class ControllerActor extends QakActor22{
 				ColorsOut.outappl(getName() + " | unexpected message ", ColorsOut.RED);
 			}
 		}else if( state == 2) {
-			if(msg.msgSender()==ApplData.ledName) {
+			if(msg.msgSender().equals(ApplData.ledName)) {
 				if(msg.msgContent().equals(""+ledRequiredState)) {
 					state = 1;
 					numIter ++;

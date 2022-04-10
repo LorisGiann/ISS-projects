@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import it.unibo.radarSystem22.domain.Distance;
 import it.unibo.radarSystem22.domain.interfaces.ISonar;
 import it.unibo.radarSystem22.domain.models.SonarModel;
+import it.unibo.radarSystem22.domain.utils.BasicUtils;
 import it.unibo.radarSystem22.domain.utils.ColorsOut;
 import it.unibo.radarSystem22.domain.utils.DomainSystemConfig;
 
@@ -42,18 +43,22 @@ public class SonarConcrete extends SonarModel implements ISonar{
 	@Override
 	protected void sonarProduce( ) {
         try {
+        	//BasicUtils.delay(100);
 			String data = reader.readLine();
+			//while(reader.read()<0) {};
+			//reader.readLine();
 			if( data == null ) return;
 			int v = Integer.parseInt(data);
 			ColorsOut.out("SonarConcrete | v=" + v );
 			int lastSonarVal = curVal.getVal();
 			if( lastSonarVal != v && v < DomainSystemConfig.sonarDistanceMax) {	
 				//Eliminiamo dati del tipo 3430 //TODO: filtri in sottosistemi a stream
-  	 			updateDistance( v );	 			
+  	 			updateDistance( v );
 			}
        }catch( Exception e) {
        		ColorsOut.outerr("SonarConcrete |  " + e.getMessage() );
-       }		
+       }
+        updateDistance( 10 );
 	}
  
 	@Override

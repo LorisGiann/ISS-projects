@@ -71,7 +71,9 @@ eclipse {
     }
 }
 
-mainClassName = 'unibo.actor22.local.RSActor22onRasp'
+mainClassName = 'unibo.actor22.local.RSActor22onRasp'          //everithing local on the raspberry
+//mainClassName = 'unibo.actor22.distrib.RSActor22Distrib_rasp'    //LedActor and SonarActor on raspberry, Controller on PC
+
 
 jar {
     from sourceSets.main.allSource
@@ -103,11 +105,13 @@ scp /home/loris/Desktop/lorisIssLab2022/$PROJECT_NAME/build/distributions/$TARNA
 ssh pi@$IP "rm -rf loris-radar/$DEPLOY_DIRNAME/$TARNAME"
 ssh pi@$IP "tar -C loris-radar/$DEPLOY_DIRNAME/ -xvpf loris-radar/$DEPLOY_DIRNAME/$TARNAME.tar"
 ssh pi@$IP "cp ~/loris-radar/bin_executables/{SonarAlone,led25GpioTurnOff.sh,led25GpioTurnOn.sh} ~/loris-radar/$DEPLOY_DIRNAME/$TARNAME/bin"
-ssh pi@$IP "~/loris-radar/$DEPLOY_DIRNAME/$TARNAME/bin/$PROJECT_NAME"
+ssh pi@$IP "cd ~/loris-radar/$DEPLOY_DIRNAME/$TARNAME/bin; ~/loris-radar/$DEPLOY_DIRNAME/$TARNAME/bin/$PROJECT_NAME"
 */
 
-
 /*
+sudo ss -ntlp
+build/scripts/deploy.sh
+
 git rm --cached .project
 git rm --cached .classpath
 */ 

@@ -4,6 +4,7 @@ import it.unibo.radarSystem22.domain.Distance;
 import it.unibo.radarSystem22.domain.concrete.SonarConcrete;
 import it.unibo.radarSystem22.domain.interfaces.*;
 import it.unibo.radarSystem22.domain.mock.SonarMock;
+import it.unibo.radarSystem22.domain.utils.BasicUtils;
 import it.unibo.radarSystem22.domain.utils.ColorsOut;
 import it.unibo.radarSystem22.domain.utils.DomainSystemConfig;
 
@@ -65,7 +66,7 @@ protected  IDistance curVal = new Distance(90);
 				while( ! stopped  ) {
 					//Colors.out("SonarModel | call produce", Colors.GREEN);
 					sonarProduce(  );
-					//Utils.delay(RadarSystemConfig.sonarDelay);
+					BasicUtils.delay(2); //allow some time for the new value to be read by other threads
 				}
 				ColorsOut.out("SonarModel | ENDS" );
 		    }
