@@ -13,18 +13,16 @@ import unibo.actor22comm.utils.CommUtils;
  * Il controller conosce SOLO I NOMI dei dispositivi 
  * (non ha riferimenti ai dispositivi-attori)
  */
-public class ControllerActor extends QakActor22{
+public class ControllerObservableActor extends QakActor22{
 	private static final int ITERATIONS = 1000;
 	private static final int TIME_BETWEEN_ITERATIONS = 100;
 	protected int numIter = -1;
 	protected int state = -1;
-	protected IApplMessage getStateRequest ;
 	protected boolean on = true;
 	boolean ledRequiredState;
 
-	public ControllerActor(String name  ) {
+	public ControllerObservableActor(String name  ) {
 		super(name);
-		getStateRequest  = ApplData.buildRequest(name,"ask", ApplData.reqLedState, ApplData.ledName);
 	}
 
 	@Override
@@ -39,12 +37,15 @@ public class ControllerActor extends QakActor22{
 	protected void elabCmd(IApplMessage msg) {
 		String msgCmd = msg.msgContent();
 		ColorsOut.outappl( getName()  + " | elabCmd=" + msgCmd, ColorsOut.GREEN);
-		switch( msgCmd ) {
-		case ApplData.cmdActivate : {
-			doControllerWork();
-			break;
+		if(msg.msgSender().equals(ApplData.sonarName) && msg.msgId().equals("update")) {
+			newDistance(new Distance(msg.msgContent()));
 		}
-		default:break;
+		switch( msgCmd ) {
+			case ApplData.cmdActivate : {
+				doControllerWork();
+				break;
+			}
+			default:break;
 		}		
 	}
 	
@@ -67,39 +68,12 @@ public class ControllerActor extends QakActor22{
 				}
 				numIter=1;
 				request( ApplData.reqDistanceSonar );
-				state=1;
 			}else {
 				ColorsOut.outappl(getName() + " | unexpected message ", ColorsOut.RED);
 			}
-		} else if( state == 1 ) {
-			if(msg.msgSender().equals(ApplData.sonarName)) {
-				IDistance dist = new Distance(msg.msgContent());
-				if( dist.getVal() < DomainSystemConfig.DLIMIT) {
-					ledRequiredState = true;
-					forward( ApplData.turnOnLed ); //accesione
-				} else {
-					ledRequiredState = false;
-					forward( ApplData.turnOffLed ); //spegnimento
-				}
-				request(getStateRequest);
-				state=2;
-			}else {
-				ColorsOut.outappl(getName() + " | unexpected message ", ColorsOut.RED);
-			}
-		}else if( state == 2) {
-			if(msg.msgSender().equals(ApplData.ledName)) {
-				if(msg.msgContent().equals(""+ledRequiredState)) {
-					state = 1;
-					numIter ++;
-					if (numIter > ITERATIONS) stop();
-					BasicUtils.delay(TIME_BETWEEN_ITERATIONS);
-					request( ApplData.reqDistanceSonar );
-				}else {
-					ColorsOut.outappl(getName() + " | error led state ", ColorsOut.RED);
-					stop();
-				}
-			}else {
-				ColorsOut.outappl(getName() + " | unexpected message ", ColorsOut.RED);
+		} else {
+			if(msg.msgSender().equals(ApplData.sonarName) && msg.msgId().equals("update")) {
+				newDistance(new Distance(msg.msgContent()));
 			}
 		}
 	}
@@ -107,6 +81,21 @@ public class ControllerActor extends QakActor22{
 	protected void stop() {
 		forward( ApplData.deactivateSonar ); //spegnimento
 		System.exit(0);
+	}
+	
+	protected void newDistance(IDistance dist) {
+		if( dist.getVal() < DomainSystemConfig.DLIMIT) {
+			ledRequiredState = true;
+			forward( ApplData.turnOnLed ); //accesione
+		} else {
+			ledRequiredState = false;
+			forward( ApplData.turnOffLed ); //spegnimento
+		}
+		//request(getStateRequest);
+		IApplMessage msg = ApplData.buildDispatch(ApplData.controllerName, "cmd", dist.toString(), ApplData.radarName);
+		forward( msg );
+		numIter ++;
+		if (numIter > ITERATIONS) stop();
 	}
 
 }

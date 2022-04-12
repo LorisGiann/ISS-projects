@@ -58,7 +58,6 @@ public class SonarConcrete extends SonarModel implements ISonar{
        }catch( Exception e) {
        		ColorsOut.outerr("SonarConcrete |  " + e.getMessage() );
        }
-        updateDistance( 10 );
 	}
  
 	@Override

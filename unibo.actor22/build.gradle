@@ -71,8 +71,9 @@ eclipse {
     }
 }
 
-mainClassName = 'unibo.actor22.local.RSActor22onRasp'          //everithing local on the raspberry
+//mainClassName = 'unibo.actor22.local.RSActor22onRasp'          //everithing local on the raspberry
 //mainClassName = 'unibo.actor22.distrib.RSActor22Distrib_rasp'    //LedActor and SonarActor on raspberry, Controller on PC
+mainClassName = 'unibo.actor22.distrib.RSActor22DistSonarObs_rasp'
 
 
 jar {

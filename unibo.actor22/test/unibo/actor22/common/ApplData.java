@@ -10,6 +10,7 @@ public class ApplData {
 	public static final String ledName        = "led";
 	public static final String controllerName = "controller";
 	public static final String observerName   = "observer";
+	public static final String radarName      = "radarGui";
 
 	public static final String comdLedon   = "turnOn";
 	public static final String comdLedoff  = "turnOff";
