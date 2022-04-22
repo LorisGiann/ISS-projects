@@ -27,12 +27,10 @@ public class ControllerObservableActor extends QakActor22{
 
 	@Override
 	protected void handleMsg(IApplMessage msg) {  
-		if( msg.isReply() ) {
-			elabAnswer(msg);
-		}else { 
-			elabCmd(msg) ;	
-		}
-	}
+		if( msg.isEvent() )        elabEvent(msg);
+		else if( msg.isDispatch()) elabCmd(msg) ;	
+		else if( msg.isReply() )   elabAnswer(msg) ;	
+ 	}
 
 	protected void elabCmd(IApplMessage msg) {
 		String msgCmd = msg.msgContent();
@@ -71,16 +69,32 @@ public class ControllerObservableActor extends QakActor22{
 			}else {
 				ColorsOut.outappl(getName() + " | unexpected message ", ColorsOut.RED);
 			}
-		} else {
+		} else if(!RadarSystemConfig.sonarObservable || numIter==1){ //receiving updates because not using events, or initial distance request reply
 			if(msg.msgSender().equals(ApplData.sonarName) && msg.msgId().equals("update")) {
 				newDistance(new Distance(msg.msgContent()));
+				numIter++;
 			}
+		}else {
+			ColorsOut.outappl(getName() + " | unexpected message ", ColorsOut.RED);
 		}
 	}
 
 	protected void stop() {
 		forward( ApplData.deactivateSonar ); //spegnimento
 		System.exit(0);
+	}
+	
+	protected void elabEvent(IApplMessage msg) {
+		ColorsOut.outappl( getName()  + " | elabEvent=" + msg, ColorsOut.GREEN);
+		if( msg.isEvent() && msg.msgId().equals(ApplData.evDistance) && RadarSystemConfig.sonarObservable ) {  //defensive
+			try{
+				newDistance(new Distance(msg.msgContent()));
+			}catch (NumberFormatException e) {
+				ColorsOut.outappl(getName() + " | event does not contain distance!", ColorsOut.RED);
+			}
+		}else {
+			ColorsOut.outappl(getName() + " | unexpected event ", ColorsOut.RED);
+		}
 	}
 	
 	protected void newDistance(IDistance dist) {

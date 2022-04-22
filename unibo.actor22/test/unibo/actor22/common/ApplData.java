@@ -23,6 +23,7 @@ public class ApplData {
 	public static final String reqDistance  = "getDistance";
 
 	public static final String evEndWork    = "endWork";
+	public static final String evDistance   = "distance";
 
 	public static final int ctxPort          = 8018;
 	public static final ProtocolType protocol= ProtocolType.tcp;

@@ -9,7 +9,9 @@ import it.unibo.radarSystem22.domain.interfaces.IObserver;
 import it.unibo.radarSystem22.domain.interfaces.ISonar;
 import it.unibo.radarSystem22.domain.models.SonarModel;
 import it.unibo.radarSystem22.domain.utils.DomainSystemConfig;
+import unibo.actor22.Qak22Util;
 import unibo.actor22.QakActor22;
+import unibo.actor22comm.events.EventMsgHandler;
 import unibo.actor22comm.utils.ColorsOut;
 import unibo.actor22comm.utils.CommUtils;
 import it.unibo.radarSystem22.domain.DeviceFactory;
@@ -28,8 +30,13 @@ public class SonarObservableActor extends QakActor22{
 		public void update(Observable arg0, Object arg1) {}
 		@Override
 		public void update(String value) {
-			IApplMessage newValMsg = ApplData.buildDispatch(ApplData.sonarName, "update", value, ApplData.controllerName);
-			forward(newValMsg);
+			if( !RadarSystemConfig.sonarObservable ) {
+				IApplMessage newValMsg = ApplData.buildDispatch(ApplData.sonarName, "update", value, ApplData.controllerName);
+				forward(newValMsg);
+			}else {
+				IApplMessage distanceEvent = Qak22Util.buildEvent(getName(), ApplData.evDistance, ""+value, EventMsgHandler.myName);
+				emit(distanceEvent);
+			}
 		}
 	};
 

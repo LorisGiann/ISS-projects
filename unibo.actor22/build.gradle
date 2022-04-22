@@ -36,6 +36,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.eclipse.californium/californium-proxy
 	implementation group: 'org.eclipse.californium', name: 'californium-proxy', version: '2.0.0-M12'
 
+//OkHttp library for websockets with Kotlin
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.14.0'    
+	// https://mvnrepository.com/artifact/com.squareup.okhttp3/mockwebserver
+	testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.9.3'
 
 //JSON
     // https://mvnrepository.com/artifact/org.json/json
@@ -73,7 +77,8 @@ eclipse {
 
 //mainClassName = 'unibo.actor22.local.RSActor22onRasp'          //everithing local on the raspberry
 //mainClassName = 'unibo.actor22.distrib.RSActor22Distrib_rasp'    //LedActor and SonarActor on raspberry, Controller on PC
-mainClassName = 'unibo.actor22.distrib.RSActor22DistSonarObs_rasp'
+//mainClassName = 'unibo.actor22.distrib.RSActor22DistSonarObs_rasp'  //LedActor and SonarActor on raspberry, Controller and radardisplay on PC, updated on measure change
+mainClassName = 'unibo.actor22.distrib.RSActor22DistSonarEventEmitter_rasp' //LedActor and SonarActor on raspberry, Controller and radardisplay on PC, updated through events
 
 
 jar {

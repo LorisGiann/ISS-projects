@@ -9,6 +9,7 @@ import unibo.actor22.annotations.ActorLocal;
 import unibo.actor22.annotations.ActorRemote;
 import unibo.actor22.common.ApplData;
 import unibo.actor22.common.EventObserver;
+import unibo.actor22.common.RadarSystemConfig;
 import unibo.actor22comm.ProtocolType;
 import unibo.actor22comm.utils.ColorsOut;
 import unibo.actor22comm.utils.CommSystemConfig;
@@ -45,6 +46,7 @@ public class RSActor22Distrib_PC {
 		CommSystemConfig.tracing        = false;
 		DomainSystemConfig.DLIMIT       = 30;
 		ProtocolType protocol 		    = CommSystemConfig.protcolType;
+		RadarSystemConfig.sonarObservable = false;
 		
 		//Qak22Context.initContext();
 		
